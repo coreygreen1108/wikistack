@@ -56,9 +56,7 @@ router.get('/:url_title',function(req,res, next){
 	Page.findOne({where: {urlTitle: req.params.url_title}})
 	.then(function(page){
 		res.render('wikipage', 
-		{title: page.title, 
-		author_name: "Taylor Swift",
-		content: page.content});
+		{page});
 	}).catch(next);
 });
 

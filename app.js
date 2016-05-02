@@ -25,9 +25,11 @@ models.User.sync({})
 })
 .catch(console.error);
 
+app.use(express.static('./public'));
+
 // body parser
-app.use(bodyparser.urlencoded())
-app.use(bodyparser.json()) // application/json
+app.use(bodyparser.urlencoded());
+app.use(bodyparser.json()); // application/json
 
 app.use('/wiki', wikiRoutes);
 app.use('/users', userRoutes); 

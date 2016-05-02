@@ -2,6 +2,7 @@ var router = require('express').Router();
 var models = require('../models');
 var Page = models.Page;
 var User = models.User;
+var Promise = require('sequelize').Promise;
 
 module.exports = router;
 
@@ -13,13 +14,18 @@ router.get('/', function (req, res) {
 });
 
 router.get('/:id', function (req, res, next) {
-	Page.findAll({
+	var userPromise = User.findById(req.params.id);
+	var pagePromise = Page.findAll({
 		where: {
 			authorId: req.params.id
 		}
-	})
-	.then(function (pages) {
-		res.render('index', {pages})
+	});
+
+	Promise.all([userPromise, pagePromise])
+	.then(function (result) {
+		var user = result[0];
+		var pages = result[1];
+		res.render('index', {user, pages})
 	})
 	.catch(next);
 });
