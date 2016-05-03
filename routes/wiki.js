@@ -17,6 +17,7 @@ router.post('/',function(req,res, next){
 		var newPage = Page.build({
 			title: req.body.title,
 			content: req.body.page_content,
+			tags: req.body.tags.split(/\s*,\s*/g), 
 			urlTitle: convertTitle(req.body.title),
 			status: req.body.status
 		});
@@ -29,16 +30,6 @@ router.post('/',function(req,res, next){
 	.then(function (page) {
 		res.redirect(page.route);
 	}).catch(next);
-	// .catch(function () {
-	// 	User.build({
-	// 		name: req.body.author_name,
-	// 		email: req.body.author_email
-	// 	})
-	// 	.save()
-	// 	.then(function (author) {
-	// 		author = author.name
-	// 	})
-	// });
 });
 
 router.get('/', function(req, res){
@@ -53,13 +44,30 @@ router.get('/add',function(req,res){
 });
 
 router.get('/:url_title',function(req,res, next){
-	Page.findOne({where: {urlTitle: req.params.url_title}})
+	Page.findByUrlTitle(req.params.url_title)
 	.then(function(page){
-		res.render('wikipage', 
-		{page});
+		//console.log(page);
+		if(page === null){
+			res.status(404).send("404 :O"); 
+		}
+		else {
+			res.render('wikipage', 
+			{page});
+		}
 	}).catch(next);
 });
 
+router.get('/:url_title/similar', function(req, res, next){
+	Page.findByUrlTitle(req.params.url_title)
+	.then(function(page){
+		//console.log(page);
+		return page.findSimilar()
+	})
+	.then(function (pages) {
+		res.render('index', {pages});
+	}).catch(next);
+
+})
 
 module.exports = router; 
 

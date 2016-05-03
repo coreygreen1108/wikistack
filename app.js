@@ -7,7 +7,7 @@ var bodyparser = require('body-parser');
 var models = require('./models'); //by default node will import index as default. 
 var wikiRoutes = require('./routes/wiki');
 var userRoutes = require('./routes/users');
-
+var searchRoutes = require('./routes/search');
 //This block is implementation of swig. 
 app.set('views', path.join(__dirname, '/views'));
 app.set('view engine', 'html');
@@ -33,3 +33,4 @@ app.use(bodyparser.json()); // application/json
 
 app.use('/wiki', wikiRoutes);
 app.use('/users', userRoutes); 
+app.use('/search', searchRoutes); 

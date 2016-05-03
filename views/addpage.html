@@ -3,37 +3,44 @@
 {% block content %}
   <h3>Add a Page</h3>
   <hr>
-  <form method="POST" action="/wiki/">
+  <form method="POST" action="/wiki/" class="form">
     
-    <div class="form-group">
+    <div class="form-group row">
       <label for="author_name" class="col-sm-2 control-label">Author Name</label>
       <div class="col-sm-10">
         <input name="author_name" type="text" class="form-control"/>
       </div>
     </div>
     
-    <div class="form-group">
+    <div class="form-group row">
       <label for="author_email" class="col-sm-2 control-label">Author Email</label>
       <div class="col-sm-10">
         <input name="author_email" type="text" class="form-control"/>
       </div>
     </div>
     
-    <div class="form-group">
+    <div class="form-group row">
       <label for="title" class="col-sm-2 control-label">Page Title</label>
       <div class="col-sm-10">
         <input name="title" type="text" class="form-control"/>
       </div>
     </div>
     
-    <div class="form-group">      
+    <div class="form-group row">
+      <label for="tags" class="col-sm-2 control-label"> Page Tags (Seperated by a comma)</label>
+      <div class="col-sm-10">
+        <input name="tags" type="text" class="form-control"/>
+      </div>
+    </div>
+
+    <div class="form-group row">      
       <label for="page_content" class="col-sm-2 control-label">Page Content</label>
       <div class="col-sm-10">
         <textarea name="page_content" class="form-control"></textarea>
       </div>
     </div>
     
-    <div class="form-group">
+    <div class="form-group row">
       <label for="page_status" class="col-sm-2 control-label">Page Status</label>
       <div class="col-sm-10">
         <div class="radio">

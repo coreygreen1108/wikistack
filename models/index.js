@@ -2,6 +2,7 @@ var Sequelize = require('sequelize');
 var db = new Sequelize('postgres://localhost:5432/wikistack', {
 	logging: false
 });
+var marked = require('marked');
 
 var Page = db.define('page', {
     title: {
@@ -18,11 +19,44 @@ var Page = db.define('page', {
     },
     date: {
         type: Sequelize.DATE, defaultValue: Sequelize.NOW 
+    },
+    tags: {
+        type: Sequelize.ARRAY(Sequelize.STRING)
     }
 },{
 	getterMethods: {
-		route: function(){ return ("/wiki/" + this.urlTitle) }
-	}
+	   route: function(){ return ("/wiki/" + this.urlTitle) },
+	   renderedContent: function () {
+            marked(this.content, function (markdownString) {
+                return markdownString
+            })
+       }
+    },
+    instanceMethods:
+    {
+        findSimilar: function () {
+            return Page.findAll({
+                where: {
+                    id: {
+                        $ne: this.id
+                    },
+                    tags: {
+                        $overlap: this.tags  
+                    }
+                }
+            })
+        }
+    },
+    classMethods: 
+    {
+        findByUrlTitle: function (urlTitle) {
+            return Page.findOne({where: {urlTitle: urlTitle}, include: {model: User, as: "author"}})
+        },
+        findByTag: function(tag) {
+            return (this.tags === tag);
+        }
+    }
+  
 });
 
 var User = db.define('user', {
